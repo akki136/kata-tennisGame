@@ -1,6 +1,11 @@
 package com.kata.tennis.utility;
 
+import java.util.UUID;
+
+import com.kata.tennis.enums.Player;
 import com.kata.tennis.enums.ScoreBoard;
+import com.kata.tennis.managescore.GameStats;
+import com.kata.tennis.managescore.PlayerMatchStat;
 
 /**
  * Utility  class contains generic methods used for data conversion
@@ -118,5 +123,27 @@ public final class Utility {
 		return ScoreBoard.SEVEN;
 		
 	}
+	}
+	
+	
+	/**
+	 * initializeMatch() is used to initialize Game in a Set
+	 * 
+	 *
+	 */
+	public static GameStats initializeMatch(Player p1, Player p2, int no) {
+		PlayerMatchStat player1 = createPlayerStat(p1);
+		PlayerMatchStat player2= createPlayerStat(p2);
+		GameStats gameStats=new GameStats(player1,player2,UUID.randomUUID().toString());
+		return gameStats;
+	}
+
+	public static PlayerMatchStat createPlayerStat(Player p1) {
+		PlayerMatchStat player1=new PlayerMatchStat();
+		player1.setPlayer(p1);
+		player1.setPlayerPoints(ScoreBoard.ZERO);
+		player1.setScore(0);
+		player1.addScoreToList(utility.getValue(player1.getScore()));
+		return player1;
 	}
 }

@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -15,7 +14,8 @@ import org.junit.jupiter.api.Test;
 import com.kata.tennis.enums.Player;
 import com.kata.tennis.enums.ScoreBoard;
 import com.kata.tennis.exception.TennisException;
-import com.kata.tennis.game.GamePlay;
+import com.kata.tennis.game.TennisGameController;
+import com.kata.tennis.kataApp.testdataset.TennisGameTestDataSet;
 import com.kata.tennis.managescore.GameStats;
 import com.kata.tennis.managescore.MatchSet;
 import com.kata.tennis.managescore.PlayerMatchStat;
@@ -29,12 +29,12 @@ public class TennisGameTest
 	/**
 	 * Rigorous Test :-)
 	 */
-	private GamePlay gamePlay=null;
+	private TennisGameController gamePlay=null;
 
 	@BeforeEach
 	public void init()
 	{
-		gamePlay=GamePlay.startPlay(Player.PLAYER1,Player.PLAYER2,1,1);
+		gamePlay=TennisGameController.startPlay(Player.PLAYER1,Player.PLAYER2,1,1);
 	}
 
 
@@ -52,35 +52,21 @@ public class TennisGameTest
 	@DisplayName("Player1 Wins the Match(Deuce)")
 	public void player1WinsTheMatchWithDeuceTest() throws TennisException
 	{
-		List<Player>  players=	getPlayerScoreDeucePlayer1Wins();
+		List<Player>  players=	TennisGameTestDataSet.getPlayerScoreDeucePlayer1Wins();
 		LinkedHashMap<Integer, MatchSet> matchResult=null;
 		for(Player player:players)
 		{
-		 matchResult=	gamePlay.playTennis(player,1,1);
+			matchResult=	gamePlay.playTennis(player,1,1);
 		}
-		assertNotNull(matchResult);
-		assertNotEquals(matchResult.size(), 0);
-		MatchSet matchSet=    matchResult.get(1);
-		assertNotNull(matchSet);
-		LinkedHashMap<Integer,GameStats> gameStats=   matchSet.getSetStats();
-		assertNotNull(gameStats);
-		assertNotEquals(gameStats.size(), 0);
+		LinkedHashMap<Integer, GameStats> gameStats = dataValidationAsserts(matchResult);
 		GameStats  stats= gameStats.get(1);
 		Player winner=  stats.getWinner();
 		assertEquals(stats.getHasDeuce(), true);
 		assertEquals(Player.PLAYER1, winner);
 	}
-	
-	@Test
-	@DisplayName("Player1 Wins the Match without Deuce")
-	public void player1WinsTheMatchTest() throws TennisException
-	{
-		List<Player>  players=	getPlayer1WinDataSet();
-		LinkedHashMap<Integer, MatchSet> matchResult=null;
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,1);
-		}
+
+
+	private LinkedHashMap<Integer, GameStats> dataValidationAsserts(LinkedHashMap<Integer, MatchSet> matchResult) {
 		assertNotNull(matchResult);
 		assertNotEquals(matchResult.size(), 0);
 		MatchSet matchSet=    matchResult.get(1);
@@ -88,29 +74,37 @@ public class TennisGameTest
 		LinkedHashMap<Integer,GameStats> gameStats=   matchSet.getSetStats();
 		assertNotNull(gameStats);
 		assertNotEquals(gameStats.size(), 0);
+		return gameStats;
+	}
+
+	@Test
+	@DisplayName("Player1 Wins the Match without Deuce")
+	public void player1WinsTheMatchTest() throws TennisException
+	{
+		List<Player>  players=	TennisGameTestDataSet.getPlayer1WinDataSet();
+		LinkedHashMap<Integer, MatchSet> matchResult=null;
+		for(Player player:players)
+		{
+			matchResult=	gamePlay.playTennis(player,1,1);
+		}
+		LinkedHashMap<Integer, GameStats> gameStats = dataValidationAsserts(matchResult);
 		GameStats  stats= gameStats.get(1);
 		assertNotEquals(stats.getHasDeuce(), true);
 		Player winner=  stats.getWinner();
 		assertEquals(Player.PLAYER1, winner);
 	}
-	
+
 	@Test
 	@DisplayName("Player2  Wins the Match without Deuce")
 	public void player2WinsTheMatchTest() throws TennisException
 	{
-		List<Player>  players=	getPlayer2WinDataSet();
+		List<Player>  players=	TennisGameTestDataSet.getPlayer2WinDataSet();
 		LinkedHashMap<Integer, MatchSet> matchResult=null;
 		for(Player player:players)
 		{
-		 matchResult=	gamePlay.playTennis(player,1,1);
+			matchResult=	gamePlay.playTennis(player,1,1);
 		}
-		assertNotNull(matchResult);
-		assertNotEquals(matchResult.size(), 0);
-		MatchSet matchSet=    matchResult.get(1);
-		assertNotNull(matchSet);
-		LinkedHashMap<Integer,GameStats> gameStats=   matchSet.getSetStats();
-		assertNotNull(gameStats);
-		assertNotEquals(gameStats.size(), 0);
+		LinkedHashMap<Integer, GameStats> gameStats = dataValidationAsserts(matchResult);
 		GameStats  stats= gameStats.get(1);
 		assertNotEquals(stats.getHasDeuce(), true);
 		Player winner=  stats.getWinner();
@@ -122,341 +116,115 @@ public class TennisGameTest
 	@DisplayName("Player2 Wins the Match (Deuce)")
 	public void player2WinsTheMatchWithDeuceTest() throws TennisException
 	{
-		List<Player>  players=	getPlayerScoreDeucePlayer2Wins();
+		List<Player>  players=	TennisGameTestDataSet.getPlayerScoreDeucePlayer2Wins();
 		LinkedHashMap<Integer, MatchSet> matchResult=null;
 		for(Player player:players)
 		{
-		 matchResult=	gamePlay.playTennis(player,1,1);
+			matchResult=	gamePlay.playTennis(player,1,1);
 		}
-		assertNotNull(matchResult);
-		assertNotEquals(matchResult.size(), 0);
-		MatchSet matchSet=    matchResult.get(1);
-		assertNotNull(matchSet);
-		LinkedHashMap<Integer,GameStats> gameStats=   matchSet.getSetStats();
-		assertNotNull(gameStats);
-		assertNotEquals(gameStats.size(), 0);
+		LinkedHashMap<Integer, GameStats> gameStats = dataValidationAsserts(matchResult);
 		GameStats  stats= gameStats.get(1);
 		Player winner=  stats.getWinner();
 		assertEquals(stats.getHasDeuce(), true);
 		assertEquals(Player.PLAYER2, winner);
 	}
-	
+
 	@Test
 	@DisplayName("Player1 Wins the Set")
 	public void player1WinsTheSet() throws TennisException
 	{
-		List<Player>  players=	getPlayer1WinDataSet();
 		LinkedHashMap<Integer, MatchSet> matchResult=null;
-		int i=1;
-		while(i<=8)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		assertNotNull(matchResult);
-		assertNotEquals(matchResult.size(), 0);
-		MatchSet matchSet=    matchResult.get(1);
-		assertEquals(Player.PLAYER1, matchSet.getWinner());
-		assertNotNull(matchSet);
-		LinkedHashMap<Integer,GameStats> gameStats=   matchSet.getSetStats();
-		assertNotNull(gameStats);
-		assertNotEquals(gameStats.size(), 0);
-		GameStats  stats= gameStats.get(1);
+		List<Player>  player1Winset=	TennisGameTestDataSet.getPlayer1WinDataSet();
+		matchResult = tennisPlayResult(player1Winset, matchResult, 8,1);
+		GameStats stats = matchDataValidationAsserts(matchResult,Player.PLAYER1);
 		Player winner=  stats.getWinner();
 		assertNotEquals(stats.getHasDeuce(), true);
 		assertEquals(Player.PLAYER1, winner);
 	}
 
-	
 	@Test
 	@DisplayName("Player2 Wins the Set")
 	public void player2WinsTheSet() throws TennisException
 	{
-		List<Player>  players=	getPlayer2WinDataSet();
+		List<Player>  player2Winset=	TennisGameTestDataSet.getPlayer2WinDataSet();
 		LinkedHashMap<Integer, MatchSet> matchResult=null;
-		int i=1;
-		while(i<=8)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		assertNotNull(matchResult);
-		assertNotEquals(matchResult.size(), 0);
-		MatchSet matchSet=    matchResult.get(1);
-		assertEquals(Player.PLAYER2, matchSet.getWinner());
-		assertNotNull(matchSet);
-		LinkedHashMap<Integer,GameStats> gameStats=   matchSet.getSetStats();
-		assertNotNull(gameStats);
-		assertNotEquals(gameStats.size(), 0);
-		GameStats  stats= gameStats.get(1);
+		matchResult = tennisPlayResult(player2Winset, matchResult, 8,1);
+		GameStats  stats= matchDataValidationAsserts(matchResult,Player.PLAYER2);
 		Player winner=  stats.getWinner();
 		assertNotEquals(stats.getHasDeuce(), true);
 		assertEquals(Player.PLAYER2, winner);
 	}
-	
+
 	@Test
 	@DisplayName(" Player 1 win a Game and reach the Set score of 6 and the Player2 has a Set score of 4")
-	public void player1WinsThreshHoldSet() throws TennisException
+	public void player1WinsThresholdSet() throws TennisException
 	{
-		List<Player>  players=	getPlayer2WinDataSet();
+
+		List<Player>  player1Winset=	TennisGameTestDataSet.getPlayer1WinDataSet();
+		List<Player>  player2Winset=	TennisGameTestDataSet.getPlayer2WinDataSet();
 		LinkedHashMap<Integer, MatchSet> matchResult=null;
-		int i=1;
-		while(i<=5)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		i=5;
-		 players=	getPlayer1WinDataSet();
-		while(i<=15)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		assertNotNull(matchResult);
-		assertNotEquals(matchResult.size(), 0);
+		matchResult = tennisPlayResult(player2Winset, matchResult, 5,1);
+		matchResult = tennisPlayResult(player1Winset, matchResult, 15,5);
 		MatchSet matchSet=    matchResult.get(1);
-		assertEquals(Player.PLAYER1, matchSet.getWinner());
-		assertNotNull(matchSet);
-		LinkedHashMap<Integer,GameStats> gameStats=   matchSet.getSetStats();
-		assertNotNull(gameStats);
-		assertNotEquals(gameStats.size(), 0);
-		GameStats  stats= gameStats.get(10);
-		Player winner=  stats.getWinner();
 		assertEquals(matchSet.getThreshholdActivated(), true);
-		assertNotEquals(stats.getHasDeuce(), true);
-		assertEquals(Player.PLAYER1, winner);
+		assertEquals(Player.PLAYER1, matchSet.getWinner());
 	}
-	
+
 	@Test
 	@DisplayName(" Player 2 win a Game and reach the Set score of 6 and the Player2 has a Set score of 4")
-	public void player2WinsThreshHoldSet() throws TennisException
+	public void player2WinsThresholdSet() throws TennisException
 	{
-		List<Player>  players=	getPlayer1WinDataSet();
+
+		List<Player>  player1Winset=TennisGameTestDataSet.getPlayer1WinDataSet();
+		List<Player>  player2Winset=TennisGameTestDataSet.getPlayer2WinDataSet();
 		LinkedHashMap<Integer, MatchSet> matchResult=null;
-		int i=1;
-		while(i<=5)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		i=5;
-		 players=	getPlayer2WinDataSet();
-		while(i<=15)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		assertNotNull(matchResult);
-		assertNotEquals(matchResult.size(), 0);
+		matchResult = tennisPlayResult(player1Winset, matchResult, 5,1);
+		matchResult = tennisPlayResult(player2Winset, matchResult, 15,5);
 		MatchSet matchSet=    matchResult.get(1);
 		assertEquals(Player.PLAYER2, matchSet.getWinner());
 		assertNotNull(matchSet);
 		LinkedHashMap<Integer,GameStats> gameStats=   matchSet.getSetStats();
-		assertNotNull(gameStats);
-		assertNotEquals(gameStats.size(), 0);
 		GameStats  stats= gameStats.get(10);
 		Player winner=  stats.getWinner();
 		assertEquals(matchSet.getThreshholdActivated(), true);
-		assertNotEquals(stats.getHasDeuce(), true);
 		assertEquals(Player.PLAYER2, winner);
 	}
-	
+
 	@Test
 	@DisplayName(" Player 1 and player 2 reaches to Tie Break")
 	public void player1and2TieBreak() throws TennisException
 	{
-		
-		List<Player>  players=	getPlayer1WinDataSet();
+
+		List<Player>  player1Winset=TennisGameTestDataSet.getPlayer1WinDataSet();
+		List<Player>  player2Winset=TennisGameTestDataSet.getPlayer2WinDataSet();
 		LinkedHashMap<Integer, MatchSet> matchResult=null;
-		int i=1;
-		while(i<=4)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		i=5;
-		 players=	getPlayer2WinDataSet();
-		while(i<=8)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		i=9;
-		 players=	getPlayer1WinDataSet();
-		while(i<=9)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		i=10;
-		 players=	getPlayer2WinDataSet();
-		while(i<=10)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		i=11;
-		 players=	getPlayer1WinDataSet();
-		while(i<=11)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		i=12;
-		 players=	getPlayer2WinDataSet();
-		while(i<=12)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		assertNotNull(matchResult);
-		assertNotEquals(matchResult.size(), 0);
+		matchResult = tennisPlayResult(player1Winset, matchResult, 4,1);
+		matchResult = tennisPlayResult(player2Winset, matchResult, 8,5);
+		matchResult = tennisPlayResult(player1Winset, matchResult, 9,9);
+		matchResult = tennisPlayResult(player2Winset, matchResult, 10,10);
+		matchResult = tennisPlayResult(player1Winset, matchResult, 11,11);
+		matchResult = tennisPlayResult(player2Winset, matchResult, 12,12);
 		MatchSet matchSet=    matchResult.get(1);
 		assertEquals(matchSet.getIsTieBreak(), true);
 		assertEquals(Player.UNKNOWN, matchSet.getWinner());
-		assertNotNull(matchSet);
-		LinkedHashMap<Integer,GameStats> gameStats=   matchSet.getSetStats();
-		assertNotNull(gameStats);
-		assertNotEquals(gameStats.size(), 0);
-		GameStats  stats= gameStats.get(10);
-		Player winner=  stats.getWinner();
-		assertEquals(matchSet.getThreshholdActivated(), true);
-		assertNotEquals(stats.getHasDeuce(), true);
-		assertEquals(Player.PLAYER2, winner);
 	}
-	
-	
+
 	@Test
 	@DisplayName(" Player 1 and player 2 reaches to Tie Break as soon as a player1 gets a least 6 points and gets 2 points more than his opponent")
 	public void player1and2TieBreakANdplayer2Won() throws TennisException
 	{
-		List<Player>  players=	getPlayer1WinDataSet();
+
+
+		List<Player>  player1Winset=TennisGameTestDataSet.getPlayer1WinDataSet();
+		List<Player>  player2Winset=TennisGameTestDataSet.getPlayer2WinDataSet();
 		LinkedHashMap<Integer, MatchSet> matchResult=null;
-		int i=1;
-		while(i<=4)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		i=5;
-		 players=	getPlayer2WinDataSet();
-		while(i<=8)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		i=9;
-		 players=	getPlayer1WinDataSet();
-		while(i<=9)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		i=10;
-		 players=	getPlayer2WinDataSet();
-		while(i<=10)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		i=11;
-		 players=	getPlayer1WinDataSet();
-		while(i<=11)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		i=12;
-		 players=	getPlayer2WinDataSet();
-		while(i<=12)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		i=14;
-		 players=	getPlayer2WinDataSet();
-		while(i<=15)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
+		matchResult = tennisPlayResult(player1Winset, matchResult, 4,1);
+		matchResult = tennisPlayResult(player2Winset, matchResult, 8,5);
+		matchResult = tennisPlayResult(player1Winset, matchResult, 9,9);
+		matchResult = tennisPlayResult(player2Winset, matchResult, 10,10);
+		matchResult = tennisPlayResult(player1Winset, matchResult, 11,11);
+		matchResult = tennisPlayResult(player2Winset, matchResult, 12,12);
+		matchResult = tennisPlayResult(player2Winset, matchResult, 15,14);
 		assertNotNull(matchResult);
 		assertNotEquals(matchResult.size(), 0);
 		MatchSet matchSet=    matchResult.get(1);
@@ -469,95 +237,25 @@ public class TennisGameTest
 		assertNotEquals(gameStats.size(), 0);
 		GameStats  stats= gameStats.get(10);
 		Player winner=  stats.getWinner();
-		assertEquals(matchSet.getThreshholdActivated(), true);
-		assertNotEquals(stats.getHasDeuce(), true);
 		assertEquals(Player.PLAYER2, winner);
 	}
-	
-	
-	
+
+
+
 	@Test
 	@DisplayName(" Player 1 and player 2 reaches to Tie Break as soon as a player1 gets a least 6 points and gets 2 points more than his opponent")
 	public void player1and2TieBreakANdplayer1Won() throws TennisException
 	{
-		List<Player>  players=	getPlayer1WinDataSet();
+		List<Player>  player1Winset=TennisGameTestDataSet.getPlayer1WinDataSet();
+		List<Player>  player2Winset=TennisGameTestDataSet.getPlayer2WinDataSet();
 		LinkedHashMap<Integer, MatchSet> matchResult=null;
-		int i=1;
-		while(i<=4)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		i=5;
-		 players=	getPlayer2WinDataSet();
-		while(i<=8)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		i=9;
-		 players=	getPlayer1WinDataSet();
-		while(i<=9)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		i=10;
-		 players=	getPlayer2WinDataSet();
-		while(i<=10)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		i=11;
-		 players=	getPlayer1WinDataSet();
-		while(i<=11)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		i=12;
-		 players=	getPlayer2WinDataSet();
-		while(i<=12)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
-		i=14;
-		 players=	getPlayer1WinDataSet();
-		while(i<=15)
-		{
-		gamePlay=GamePlay.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
-		for(Player player:players)
-		{
-		 matchResult=	gamePlay.playTennis(player,1,i);
-		}
-		i++;
-		}
+		matchResult = tennisPlayResult(player1Winset, matchResult, 4,1);
+		matchResult = tennisPlayResult(player2Winset, matchResult, 8,5);
+		matchResult = tennisPlayResult(player1Winset, matchResult, 9,9);
+		matchResult = tennisPlayResult(player2Winset, matchResult, 10,10);
+		matchResult = tennisPlayResult(player1Winset, matchResult, 11,11);
+		matchResult = tennisPlayResult(player2Winset, matchResult, 12,12);
+		matchResult = tennisPlayResult(player1Winset, matchResult, 15,14);
 		assertNotNull(matchResult);
 		assertNotEquals(matchResult.size(), 0);
 		MatchSet matchSet=    matchResult.get(1);
@@ -570,26 +268,37 @@ public class TennisGameTest
 		assertNotEquals(gameStats.size(), 0);
 		GameStats  stats= gameStats.get(1);
 		Player winner=  stats.getWinner();
-		assertEquals(matchSet.getThreshholdActivated(), true);
-		assertNotEquals(stats.getHasDeuce(), true);
 		assertEquals(Player.PLAYER1, winner);
 	}
-	public static List<Player> getPlayer1WinDataSet()
-	{
-		return Arrays.asList(Player.PLAYER1,Player.PLAYER1,Player.PLAYER2,Player.PLAYER1,Player.PLAYER2,Player.PLAYER1);
+
+
+	private GameStats matchDataValidationAsserts(LinkedHashMap<Integer, MatchSet> matchResult,Player expectedWinner) {
+		assertNotNull(matchResult);
+		assertNotEquals(matchResult.size(), 0);
+		MatchSet matchSet=    matchResult.get(1);
+		assertEquals(expectedWinner, matchSet.getWinner());
+		assertNotNull(matchSet);
+		LinkedHashMap<Integer,GameStats> gameStats=   matchSet.getSetStats();
+		assertNotNull(gameStats);
+		assertNotEquals(gameStats.size(), 0);
+		GameStats  stats= gameStats.get(1);
+		return stats;
 	}
-	public static List<Player> getPlayer2WinDataSet()
-	{
-		return Arrays.asList(Player.PLAYER1,Player.PLAYER2,Player.PLAYER2,Player.PLAYER1,Player.PLAYER2,Player.PLAYER2,Player.PLAYER2);
+
+
+	private LinkedHashMap<Integer, MatchSet> tennisPlayResult(List<Player> players,
+			LinkedHashMap<Integer, MatchSet> matchResult,int n,int nextGameNo) throws TennisException {
+		int i=nextGameNo;
+		while(i<=n)
+		{
+			gamePlay=TennisGameController.startSet(Player.PLAYER1,Player.PLAYER2,1,i);
+			for(Player player:players)
+			{
+				matchResult=	gamePlay.playTennis(player,1,i);
+			}
+			i++;
+		}
+		return matchResult;
 	}
-	
-	public static List<Player> getPlayerScoreDeucePlayer1Wins()
-	{
-		return Arrays.asList(Player.PLAYER1,Player.PLAYER1,Player.PLAYER2,Player.PLAYER1,Player.PLAYER2,Player.PLAYER2,Player.PLAYER2,Player.PLAYER1,Player.PLAYER1,Player.PLAYER1,Player.PLAYER2,Player.PLAYER1,Player.PLAYER2,Player.PLAYER2);
-	}
-	
-	public static List<Player> getPlayerScoreDeucePlayer2Wins()
-	{
-		return Arrays.asList(Player.PLAYER1,Player.PLAYER1,Player.PLAYER2,Player.PLAYER1,Player.PLAYER2,Player.PLAYER2,Player.PLAYER2,Player.PLAYER1,Player.PLAYER2,Player.PLAYER1,Player.PLAYER2,Player.PLAYER2);
-	}
+
 }
